@@ -27,6 +27,7 @@ import logging
 import re
 from contextlib import nullcontext
 
+import argparse
 import hydra
 import torch
 import torch.distributed
@@ -636,9 +637,9 @@ def run_sft(config):
     destroy_global_process_group()
 
 
-@hydra.main(config_path="config", config_name="sft_trainer", version_base=None)
-def main(config):
-    run_sft(config)
+#@hydra.main(config_path="config", config_name="sft_trainer", version_base=None)
+def main(args):
+    run_sft(args.config)
 
 
 def create_sft_dataset(data_paths, data_config, tokenizer):
@@ -662,4 +663,7 @@ def create_sft_dataset(data_paths, data_config, tokenizer):
 
 
 if __name__ == "__main__":
-    main()
+    parser = argparse.ArgumentParser(description="Load and process YAML configuration.")
+    parser.add_argument("--config", type=str, required=True, help="Path to the YAML configuration file.")
+    args = parser.parse_args()
+    main(args)
